@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!-- K-SYS -->
+  <category label="30050">
+    <setting id="sep4" label="30050" type="lsep"/>
+    <setting id="username_ksys" type="text" label="30058" default=""/>
+    <setting id="password_ksys" type="text" option="hidden" label="30059" default=""/>
+    <setting id="token_ksys" type="text" option="hidden" default="" visible="false"/>
+  </category>
+</settings>
