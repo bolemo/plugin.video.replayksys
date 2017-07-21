@@ -180,42 +180,42 @@ class KsysCore:
 	:type subcat: str
 	"""
 	def list_videos_by_category(self, category, subcat):
-	  # Get the list of videos in the category.
-	  videos = self.user.getEPGbyCat(category, subcat, 0, 999999)
-	  # Iterate through videos.
-	  for video in videos:
-	    is_dir = False
-	    url = ""
+		# Get the list of videos in the category.
+		videos = self.user.getEPGbyCat(category, subcat, 0, 999999)
+		# Iterate through videos.
+		for video in videos:
+			is_dir = False
+			url = ""
 
-	    if video['count'] > 1:
-	      is_dir = True
-	      title = video['titre'] + " [" + str(video['count']) + " programmes]"
-	      list_item = xbmcgui.ListItem(label=title)
-	      url = self.get_url(action='searchVideo', title=unidecode(video['titre']))
+			if video['count'] > 1:
+				is_dir = True
+				title = video['titre'] + " [" + str(video['count']) + " programmes]"
+				list_item = xbmcgui.ListItem(label=title)
+				url = self.get_url(action='searchVideo', title=unidecode(video['titre']))
 
-	    else:
-	      # Create a list item with a text label and a thumbnail image.
-	      list_item = xbmcgui.ListItem(label=video['titre'])
-	      timeStart = modTime.mktime(modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M"))
-	      timeEnd = modTime.mktime(modTime.strptime(video['dateCompleteFin'], "%Y%m%d%H%M"))
+			else:
+				# Create a list item with a text label and a thumbnail image.
+				list_item = xbmcgui.ListItem(label=video['titre'])
+				timeStart = modTime.mktime(modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M"))
+				timeEnd = modTime.mktime(modTime.strptime(video['dateCompleteFin'], "%Y%m%d%H%M"))
 
-	      # Set additional info for the list item.
-	      list_item.setInfo('video', {'title': video['titre'], 'genre': video['categorieDetail'], 'mediatype': 'movie', 'dbid': video['id'], 'mpaa': video['classeCSA'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
-	      list_item.setProperty('IsPlayable', 'true')
+				# Set additional info for the list item.
+				list_item.setInfo('video', {'title': video['titre'], 'genre': video['categorieDetail'], 'mediatype': 'movie', 'dbid': video['id'], 'mpaa': video['classeCSA'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
+				list_item.setProperty('IsPlayable', 'true')
 
-		  duration = timeEnd - timeStart
-		  duration = self.add_margin_video(duration)
+				duration = timeEnd - timeStart
+				duration = self.add_margin_video(duration)
 
-	      urlVideo = self.user.getURLCatchup(str(video['numChaine']), int(timeStart), duration)
-	      url = self.get_url(action='play', video=urlVideo)
+				urlVideo = self.user.getURLCatchup(str(video['numChaine']), int(timeStart), duration)
+				url = self.get_url(action='play', video=urlVideo)
 
-	    list_item.setArt({'thumb': video['vignette'], 'icon': video['vignette'], 'fanart': video['vignette']})
-	    xbmcplugin.addDirectoryItem(self._handle, url, list_item, is_dir)
+			list_item.setArt({'thumb': video['vignette'], 'icon': video['vignette'], 'fanart': video['vignette']})
+			xbmcplugin.addDirectoryItem(self._handle, url, list_item, is_dir)
 
-	  # Add a sort method for the virtual folder items (alphabetically, ignore articles)
-	  xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
-	  # Finish creating a virtual folder.
-	  xbmcplugin.endOfDirectory(self._handle)
+		# Add a sort method for the virtual folder items (alphabetically, ignore articles)
+		xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+		# Finish creating a virtual folder.
+		xbmcplugin.endOfDirectory(self._handle)
 
 	"""
 	Affiche toutes les vidéos qui correspondent au titre donné.
