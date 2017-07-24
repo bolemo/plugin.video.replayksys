@@ -54,37 +54,37 @@ class KsysCore:
 	:type paramstring: str
 	"""
 	def router(self, paramstring):
-	  # Parse a URL-encoded paramstring to the dictionary of
-	  # {<parameter>: <value>} elements
-	  params = dict(parse_qsl(paramstring))
-	  # Check the parameters passed to the plugin
-	  if params:
-	    if params['action'] == 'listingChannels':
-	      self.list_channels()
-	    elif params['action'] == 'listingDayChannel':
-	      self.list_day_channel(params['channel'], params['channelNum'])
-	    elif params['action'] == 'listingVideoDayChannel':
-	      self.list_videos_by_channel(params['channel'], params['start'], params['duration'])
-	    elif params['action'] == 'listingCategories':
-	      self.list_categories()
-	    elif params['action'] == 'listingSubCategory':
-	      self.list_sub_categories(params['category'])
-	    elif params['action'] == 'listingVideoCategory':
-	      self.list_videos_by_category(params['category'], params['subcat'])
-	    elif params['action'] == 'searchVideo':
-	      self.search_video(params['title'])
-	    elif params['action'] == 'play':
-	      # Play a video from a provided URL.
-	      self.play_video(params['video'])
-	    elif params['action'] == 'settings':
-	      self.list_settings()
-	    else:
-	      # If the provided paramstring does not contain a supported action
-	      # we raise an exception. This helps to catch coding errors,
-	      # e.g. typos in action names.
-	      raise ValueError('Invalid paramstring: {0}!'.format(paramstring))
-	  else:
-	    self.home()
+		# Parse a URL-encoded paramstring to the dictionary of
+		# {<parameter>: <value>} elements
+		params = dict(parse_qsl(paramstring))
+		# Check the parameters passed to the plugin
+		if params:
+			if params['action'] == 'listingChannels':
+				self.list_channels()
+			elif params['action'] == 'listingDayChannel':
+				self.list_day_channel(params['channel'], params['channelNum'])
+			elif params['action'] == 'listingVideoDayChannel':
+				self.list_videos_by_channel(params['channel'], params['start'], params['duration'])
+			elif params['action'] == 'listingCategories':
+				self.list_categories()
+			elif params['action'] == 'listingSubCategory':
+				self.list_sub_categories(params['category'])
+			elif params['action'] == 'listingVideoCategory':
+				self.list_videos_by_category(params['category'], params['subcat'])
+			elif params['action'] == 'searchVideo':
+				self.search_video(params['title'])
+			elif params['action'] == 'play':
+				# Play a video from a provided URL.
+				self.play_video(params['video'])
+			elif params['action'] == 'settings':
+				self.list_settings()
+			else:
+				# If the provided paramstring does not contain a supported action
+				# we raise an exception. This helps to catch coding errors,
+				# e.g. typos in action names.
+				raise ValueError('Invalid paramstring: {0}!'.format(paramstring))
+		else:
+			self.home()
 
 	"""
 	Créé une URL pour appeler le plugin récursivement, avec les arguments donnés
@@ -101,41 +101,41 @@ class KsysCore:
 	Gère l'affichage de la page d'accueil (Affiche le menu Paramètres / Replays par chaine / Replays par genre....)
 	"""
 	def home(self):
-	  xbmcplugin.addDirectoryItem(self._handle, self.get_url(action='settings'), xbmcgui.ListItem(label="Paramètres"), True)
-	  xbmcplugin.addDirectoryItem(self._handle, self.get_url(action='listingChannels'), xbmcgui.ListItem(label="Replays par chaine"), True)
-	  xbmcplugin.addDirectoryItem(self._handle, self.get_url(action='listingCategories'), xbmcgui.ListItem(label="Replays par genre"), True)
-	  xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
-	  xbmcplugin.endOfDirectory(self._handle)
+		xbmcplugin.addDirectoryItem(self._handle, self.get_url(action='settings'), xbmcgui.ListItem(label="Paramètres"), True)
+		xbmcplugin.addDirectoryItem(self._handle, self.get_url(action='listingChannels'), xbmcgui.ListItem(label="Replays par chaine"), True)
+		xbmcplugin.addDirectoryItem(self._handle, self.get_url(action='listingCategories'), xbmcgui.ListItem(label="Replays par genre"), True)
+		xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+		xbmcplugin.endOfDirectory(self._handle)
 
 	"""
 	Ouvre le menu des paramètres du plugin
 	"""
 	def list_settings(self):
-			self.Addon.openSettings()
+		self.Addon.openSettings()
 
 	"""
 	Affiche toutes les catégories PRINCIPALES disponible en replay (donné par le KTV)
 	"""
 	def list_categories(self):
-	  # Get video categories
-	  categories = self.user.getCategory()
+		# Get video categories
+		categories = self.user.getCategory()
 
-	  # Iterate through categories
-	  for category in categories.keys():
-	    if len(categories[category]) > 1:
-	      list_item = xbmcgui.ListItem(label=category.title())
-	      list_item.setInfo('video', {'title': category, 'genre': category})
-	      url = self.get_url(action='listingSubCategory', category=category)
-	      xbmcplugin.addDirectoryItem(self._handle, url, list_item, True)
-	    else:
-	      subcat = categories[category][0]
-	      list_item = xbmcgui.ListItem(label=subcat)
-	      list_item.setInfo('video', {'title': subcat, 'genre': subcat})
-	      url = self.get_url(action='listingVideoCategory', category=category, subcat=unidecode(subcat))
-	      xbmcplugin.addDirectoryItem(self._handle, url, list_item, True)
+		# Iterate through categories
+		for category in categories.keys():
+			if len(categories[category]) > 1:
+				list_item = xbmcgui.ListItem(label=category.title())
+				list_item.setInfo('video', {'title': category, 'genre': category})
+				url = self.get_url(action='listingSubCategory', category=category)
+				xbmcplugin.addDirectoryItem(self._handle, url, list_item, True)
+			else:
+				subcat = categories[category][0]
+				list_item = xbmcgui.ListItem(label=subcat)
+				list_item.setInfo('video', {'title': subcat, 'genre': subcat})
+				url = self.get_url(action='listingVideoCategory', category=category, subcat=unidecode(subcat))
+				xbmcplugin.addDirectoryItem(self._handle, url, list_item, True)
 
-	  xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
-	  xbmcplugin.endOfDirectory(self._handle)
+		xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+		xbmcplugin.endOfDirectory(self._handle)
 
 	"""
 	Affiche les sous-catégories d'une catégorie principale
@@ -144,15 +144,15 @@ class KsysCore:
 	:type category: str
 	"""
 	def list_sub_categories(self, category):
-	  # Get video categories
-	  categories = self.user.getCategory()
+		# Get video categories
+		categories = self.user.getCategory()
 
-	  # Iterate through categories
-	  for subcat in categories[category]:
-	    list_item = xbmcgui.ListItem(label=subcat)
-	    list_item.setInfo('video', {'title': subcat, 'genre': subcat})
-	    url = self.get_url(action='listingVideoCategory', category=category, subcat=unidecode(subcat))
-	    xbmcplugin.addDirectoryItem(self._handle, url, list_item, True)
+		# Iterate through categories
+		for subcat in categories[category]:
+			list_item = xbmcgui.ListItem(label=subcat)
+			list_item.setInfo('video', {'title': subcat, 'genre': subcat})
+			url = self.get_url(action='listingVideoCategory', category=category, subcat=unidecode(subcat))
+			xbmcplugin.addDirectoryItem(self._handle, url, list_item, True)
 
 	  xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
 	  xbmcplugin.endOfDirectory(self._handle)
@@ -225,38 +225,38 @@ class KsysCore:
 	:type title: str
 	"""
 	def search_video(self, title):
-	  # Get the list of videos in the category.
-	  videos = self.user.getVideoByTitle(title, 0, 50000)
-	  # Iterate through videos.
-	  for video in videos:
-	    # Create a list item with a text label and a thumbnail image.
+		# Get the list of videos in the category.
+		videos = self.user.getVideoByTitle(title, 0, 50000)
+		# Iterate through videos.
+		for video in videos:
+			# Create a list item with a text label and a thumbnail image.
 
-	    timeStart = modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")
-	    timeEnd = modTime.strptime(video['dateCompleteFin'], "%Y%m%d%H%M")
+			timeStart = modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")
+			timeEnd = modTime.strptime(video['dateCompleteFin'], "%Y%m%d%H%M")
 
-	    title = video['titre'] + "  [" + modTime.strftime("%d/%m/%Y %H:%M", modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")) + "]"
-	    list_item = xbmcgui.ListItem(label=title)
+			title = video['titre'] + "  [" + modTime.strftime("%d/%m/%Y %H:%M", modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")) + "]"
+			list_item = xbmcgui.ListItem(label=title)
 
-	    timeStart = modTime.mktime(timeStart)
-	    timeEnd = modTime.mktime(timeEnd)
+			timeStart = modTime.mktime(timeStart)
+			timeEnd = modTime.mktime(timeEnd)
 
-	    # Set additional info for the list item.
-	    list_item.setInfo('video', {'title': title, 'genre': video['categorieDetail'], 'mediatype': 'movie', 'dbid': video['id'], 'mpaa': video['classeCSA'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
-	    list_item.setProperty('IsPlayable', 'true')
+			# Set additional info for the list item.
+			list_item.setInfo('video', {'title': title, 'genre': video['categorieDetail'], 'mediatype': 'movie', 'dbid': video['id'], 'mpaa': video['classeCSA'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
+			list_item.setProperty('IsPlayable', 'true')
 
-	    duration = timeEnd - timeStart
-		duration = self.add_margin_video(duration)
+			duration = timeEnd - timeStart
+			duration = self.add_margin_video(duration)
 
-	    urlVideo = self.user.getURLCatchup(str(video['numChaine']), str(int(timeStart)), duration)
-	    url = self.get_url(action='play', video=urlVideo)
+			urlVideo = self.user.getURLCatchup(str(video['numChaine']), str(int(timeStart)), duration)
+			url = self.get_url(action='play', video=urlVideo)
 
-	    list_item.setArt({'thumb': video['vignette'], 'icon': video['vignette'], 'fanart': video['vignette']})
-	    xbmcplugin.addDirectoryItem(self._handle, url, list_item, False)
+			list_item.setArt({'thumb': video['vignette'], 'icon': video['vignette'], 'fanart': video['vignette']})
+			xbmcplugin.addDirectoryItem(self._handle, url, list_item, False)
 
-	  # Add a sort method for the virtual folder items (alphabetically, ignore articles)
-	  xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
-	  # Finish creating a virtual folder.
-	  xbmcplugin.endOfDirectory(self._handle)
+		# Add a sort method for the virtual folder items (alphabetically, ignore articles)
+		xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+		# Finish creating a virtual folder.
+		xbmcplugin.endOfDirectory(self._handle)
 
 	"""
 	Affiche toutes les chaines disponibles en replay
@@ -348,7 +348,7 @@ class KsysCore:
 	:type path: str
 	"""
 	def play_video(self, path):
-	  # Create a playable item with a path to play.
-	  play_item = xbmcgui.ListItem(path=path)
-	  # Pass the item to the Kodi player.
-	  xbmcplugin.setResolvedUrl(self._handle, True, listitem=play_item)
+		# Create a playable item with a path to play.
+		play_item = xbmcgui.ListItem(path=path)
+		# Pass the item to the Kodi player.
+		xbmcplugin.setResolvedUrl(self._handle, True, listitem=play_item)
