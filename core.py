@@ -154,8 +154,8 @@ class KsysCore:
 			url = self.get_url(action='listingVideoCategory', category=category, subcat=unidecode(subcat))
 			xbmcplugin.addDirectoryItem(self._handle, url, list_item, True)
 
-	  xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
-	  xbmcplugin.endOfDirectory(self._handle)
+		xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+		xbmcplugin.endOfDirectory(self._handle)
 
 	"""
 	Ajoute une marge de 10% sur la durée totale de la vidéo avec un minimum de 10 minutes pour essayer de combler le problème de l'EPG
