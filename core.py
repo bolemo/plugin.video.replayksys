@@ -32,20 +32,21 @@ class KsysCore:
 	Initialise l'utilisateur (classe KSysUser) qui sert à appeler KTV.
 	"""
 	def initUser(self):
-		tmpToken = self.Addon.getSetting('token_ksys')
-		if tmpToken == "":
-			self.user     = KsysUser(self.Addon.getSetting('username_ksys'), self.Addon.getSetting('password_ksys'))
-			tmpToken = self.user.getToken()
-			while tmpToken == "":
-				dialog = xbmcgui.Dialog()
-				resp = dialog.yesno('Authentification K-Sys', 'Changer mes paramètres d\'identification ?')
-				if resp == False:
-					exit()
-				self.list_settings()
-				self.user = KsysUser(self.Addon.getSetting('username_ksys'), self.Addon.getSetting('password_ksys'))
-				tmpToken 	= self.user.getToken()
-		else:
-			self.user     = KsysUser(self.Addon.getSetting('username_ksys'), self.Addon.getSetting('password_ksys'), token=tmpToken)
+		self.user = KsysUser(self.Addon.getSetting('username_ksys'), self.Addon.getSetting('password_ksys'))
+		#tmpToken = self.Addon.getSetting('token_ksys')
+		#if tmpToken == "":
+		#	self.user     = KsysUser(self.Addon.getSetting('username_ksys'), self.Addon.getSetting('password_ksys'))
+		#	tmpToken = self.user.getToken()
+		#	while tmpToken == "":
+		#		dialog = xbmcgui.Dialog()
+		#		resp = dialog.yesno('Authentification K-Sys', 'Changer mes paramètres d\'identification ?')
+		#		if resp == False:
+		#			exit()
+		#		self.list_settings()
+		#		self.user = KsysUser(self.Addon.getSetting('username_ksys'), self.Addon.getSetting('password_ksys'))
+		#		tmpToken 	= self.user.getToken()
+		#else:
+		#	self.user     = KsysUser(self.Addon.getSetting('username_ksys'), self.Addon.getSetting('password_ksys'), token=tmpToken)
 
 	"""
 	Routeur qui appelle les autres fonctions en fonction de paramstring.
@@ -267,7 +268,7 @@ class KsysCore:
 		for channel in channels:
 			list_item = xbmcgui.ListItem(label=str(channel['num_ch']) + ". " + channel['name'])
 			list_item.setInfo('video', {'title': channel['name']})
-			pathLogo = os.path.join(self.pluginPath, 'resources', 'logos', channel['logo'])
+			pathLogo = os.path.join(self.pluginPath, 'resources', 'logos', str(channel['num_fr']) + '.png')
 			list_item.setArt({'thumb':  pathLogo, 'icon': pathLogo, 'fanart': fanartPath})
 			url = self.get_url(action='listingDayChannel', channelNum=channel['num_ch'], channel=unidecode(channel['name']))
 			xbmcplugin.addDirectoryItem(self._handle, url, list_item, True)
@@ -330,8 +331,8 @@ class KsysCore:
 
 				duration = timeEnd - timeStart
 				duration = self.add_margin_video(duration)
-
-				urlVideo = self.user.getURLCatchup(str(video['num']), str(int(timeStart)), str(duration))
+				print video
+				urlVideo = self.user.getURLCatchup(str(video['channel_id']), str(int(timeStart)), str(duration))
 				url = self.get_url(action='play', video=urlVideo)
 
 				list_item.setArt({'thumb': video['vignette'], 'icon': video['vignette'], 'fanart': video['vignette']})
@@ -349,6 +350,6 @@ class KsysCore:
 	"""
 	def play_video(self, path):
 		# Create a playable item with a path to play.
-		play_item = xbmcgui.ListItem(path=path)
+		play_item = xbmcgui.ListItem(path=self.user.getTempM3UCatchup(path))
 		# Pass the item to the Kodi player.
 		xbmcplugin.setResolvedUrl(self._handle, True, listitem=play_item)
