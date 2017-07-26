@@ -25,28 +25,8 @@ class KsysCore:
 		self._url = sys.argv[0]
 		# Get the plugin handle as an integer number.
 		self._handle = int(sys.argv[1])
-		self.initUser()
+		self.user = KsysUser()
 		self.pluginPath = xbmc.translatePath(self.Addon.getAddonInfo('path')).decode('utf-8')
-
-	"""
-	Initialise l'utilisateur (classe KSysUser) qui sert à appeler KTV.
-	"""
-	def initUser(self):
-		self.user = KsysUser(self.Addon.getSetting('username_ksys'), self.Addon.getSetting('password_ksys'))
-		#tmpToken = self.Addon.getSetting('token_ksys')
-		#if tmpToken == "":
-		#	self.user     = KsysUser(self.Addon.getSetting('username_ksys'), self.Addon.getSetting('password_ksys'))
-		#	tmpToken = self.user.getToken()
-		#	while tmpToken == "":
-		#		dialog = xbmcgui.Dialog()
-		#		resp = dialog.yesno('Authentification K-Sys', 'Changer mes paramètres d\'identification ?')
-		#		if resp == False:
-		#			exit()
-		#		self.list_settings()
-		#		self.user = KsysUser(self.Addon.getSetting('username_ksys'), self.Addon.getSetting('password_ksys'))
-		#		tmpToken 	= self.user.getToken()
-		#else:
-		#	self.user     = KsysUser(self.Addon.getSetting('username_ksys'), self.Addon.getSetting('password_ksys'), token=tmpToken)
 
 	"""
 	Routeur qui appelle les autres fonctions en fonction de paramstring.
@@ -331,7 +311,7 @@ class KsysCore:
 
 				duration = timeEnd - timeStart
 				duration = self.add_margin_video(duration)
-				print video
+
 				urlVideo = self.user.getURLCatchup(str(video['channel_id']), str(int(timeStart)), str(duration))
 				url = self.get_url(action='play', video=urlVideo)
 
