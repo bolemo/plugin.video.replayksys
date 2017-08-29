@@ -41,3 +41,15 @@ msgstr "Username"
 msgctxt "#30059"
 msgid "Password K-Sys"
 msgstr "Password"
+
+msgctxt "#31000"
+msgid "Replays by channels"
+msgstr ""
+
+msgctxt "#31001"
+msgid "Replays by category"
+msgstr ""
+
+msgctxt "#31002"
+msgid "Settings"
+msgstr ""

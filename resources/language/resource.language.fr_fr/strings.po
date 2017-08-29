@@ -39,3 +39,15 @@ msgstr "Nom d'utilisateur"
 msgctxt "#30059"
 msgid "Password K-Sys"
 msgstr "Mot de passe"
+
+msgctxt "#31000"
+msgid "Replays by channels"
+msgstr "Replays par chaines"
+
+msgctxt "#31001"
+msgid "Replays by category"
+msgstr "Replays par catégories"
+
+msgctxt "#31002"
+msgid "Settings"
+msgstr "Paramètres"
