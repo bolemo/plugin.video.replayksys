@@ -11,7 +11,7 @@ import time
 
 class KsysUser:
 	def __init__(self):
-		self.KTV_URL   		= "https://testing-wstv.k-sys.ch/"
+		self.KTV_URL   		= "http://api-tv.k-sys.ch/"
 		self.KAUTH_URL      = "https://accounts.caps.services/"
 
 		self.loadJwt()
