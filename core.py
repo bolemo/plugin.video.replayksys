@@ -25,7 +25,6 @@ class KsysCore:
 		self._url = sys.argv[0]
 		# Get the plugin handle as an integer number.
 		self._handle = int(sys.argv[1])
-		print "TROLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL HANDLE : " + str(self._handle)
 		self.user = KsysUser()
 		self.pluginPath = xbmc.translatePath(self.Addon.getAddonInfo('path')).decode('utf-8')
 
@@ -99,13 +98,10 @@ class KsysCore:
 	Affiche toutes les catégories PRINCIPALES disponible en replay (donné par le KTV)
 	"""
 	def list_categories(self):
-		print "TROLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL0"
 		# Get video categories
 		categories = self.user.getCategory()
-		print "TROLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL1"
 		# Iterate through categories
 		for category in categories.keys():
-			print "TROLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL1.5"
 			if len(categories[category]) > 1:
 				list_item = xbmcgui.ListItem(label=category.title())
 				list_item.setInfo('video', {'title': category, 'genre': category})
@@ -117,10 +113,8 @@ class KsysCore:
 				list_item.setInfo('video', {'title': subcat, 'genre': subcat})
 				url = self.get_url(action='listingVideoCategory', category=category, subcat=unidecode(subcat))
 				xbmcplugin.addDirectoryItem(self._handle, url, list_item, True)
-		print "TROLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL2"
 		xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
 		xbmcplugin.endOfDirectory(self._handle)
-		print "TROLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL3"
 	"""
 	Affiche les sous-catégories d'une catégorie principale
 
