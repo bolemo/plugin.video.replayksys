@@ -176,9 +176,9 @@ class KsysCore:
 				list_item = xbmcgui.ListItem(label=video['titre'])
 				timeStart = modTime.mktime(modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M"))
 				timeEnd = modTime.mktime(modTime.strptime(video['dateCompleteFin'], "%Y%m%d%H%M"))
-				print(video)
+
 				# Set additional info for the list item.
-				list_item.setInfo('video', {'title': video['titre'], 'genre': video['categorieDetail'], 'mediatype': 'movie', 'dbid': video['id'], 'mpaa': video['classeCSA'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
+				list_item.setInfo('video', {'title': video['titre'], 'genre': video['categorieDetail'], 'mediatype': 'movie', 'dbid': video['id'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
 				list_item.setProperty('IsPlayable', 'true')
 
 				duration = timeEnd - timeStart
@@ -219,7 +219,7 @@ class KsysCore:
 			timeEnd = modTime.mktime(timeEnd)
 
 			# Set additional info for the list item.
-			list_item.setInfo('video', {'title': title, 'genre': video['categorieDetail'], 'mediatype': 'movie', 'dbid': video['id'], 'mpaa': video['classeCSA'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
+			list_item.setInfo('video', {'title': title, 'genre': video['categorieDetail'], 'mediatype': 'movie', 'dbid': video['id'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
 			list_item.setProperty('IsPlayable', 'true')
 
 			duration = timeEnd - timeStart
@@ -303,7 +303,7 @@ class KsysCore:
 				timeEnd = modTime.mktime(timeEnd)
 
 				# Set additional info for the list item.
-				list_item.setInfo('video', {'title': title, 'genre': video['categorieDetail'], 'dateadded': modTime.strftime("%Y-%m-%d %H:%M:%s", modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")) ,'mediatype': 'movie', 'dbid': video['id'], 'mpaa': video['classeCSA'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
+				list_item.setInfo('video', {'title': title, 'genre': video['categorieDetail'], 'dateadded': modTime.strftime("%Y-%m-%d %H:%M:%s", modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")) ,'mediatype': 'movie', 'dbid': video['id'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
 				list_item.setProperty('IsPlayable', 'true')
 
 				duration = timeEnd - timeStart
