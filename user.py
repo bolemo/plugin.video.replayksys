@@ -18,7 +18,7 @@ class KsysUser:
 		self.loadJwt()
 
 	def loadJwt(self):
-		path_jwt = xbmc.translatePath("special://userdata/addon_data/pvr.ksys/.jwt")
+		path_jwt = xbmc.translatePath("special://userdata/addon_data/plugin.video.replayksys/.jwt")
 		if os.path.isfile(path_jwt):
 			file = open(xbmc.translatePath("special://userdata/addon_data/plugin.video.replayksys/.jwt"), "r")
 			jwt_tmp = file.read();
@@ -37,7 +37,7 @@ class KsysUser:
 			self.playerId 	    = ""
 
 	def saveJwt(self):
-		file = open(xbmc.translatePath("special://userdata/addon_data/pvr.ksys/.jwt"), "w")
+		file = open(xbmc.translatePath("special://userdata/addon_data/plugin.video.replayksys/.jwt"), "w")
 		file.write(json.dumps({
 			"accessToken":    			self.accessToken,
 			"expireAccessTokenDate": 	self.expireToken,
