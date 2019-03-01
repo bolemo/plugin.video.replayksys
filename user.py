@@ -14,7 +14,7 @@ class KsysUser:
 	def __init__(self):
 		self.KTV_URL   		= "http://api-tv.k-sys.ch/"
 		self.KAUTH_URL      = "https://accounts.caps.services/"
-
+	
 		self.loadJwt()
 
 	def loadJwt(self):
@@ -48,7 +48,7 @@ class KsysUser:
 		file.close()
 
 	def getPinCode(self):
-		self.playerId = "kodi_plugin_replayksys_" + uuid.uuid4()
+		self.playerId = "kodi_plugin_replayksys_" + str(uuid.uuid4())
 		req = requests.get("%sv1/player/%s/setup" % (self.KAUTH_URL, self.playerId))
 		return json.loads(req.text)['pin']
 
