@@ -174,8 +174,8 @@ class KsysCore:
 			else:
 				# Create a list item with a text label and a thumbnail image.
 				list_item = xbmcgui.ListItem(label=video['titre'])
-				timeStart = modTime.mktime(modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M"))
-				timeEnd = modTime.mktime(modTime.strptime(video['dateCompleteFin'], "%Y%m%d%H%M"))
+				timeStart = modTime.mktime(modTime.strptime(video['start'], "%Y%m%d%H%M"))
+				timeEnd = modTime.mktime(modTime.strptime(video['stop'], "%Y%m%d%H%M"))
 
 				# Set additional info for the list item.
 				list_item.setInfo('video', {'title': video['titre'], 'genre': video['categorieDetail'], 'mediatype': 'movie', 'dbid': video['id'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
@@ -209,10 +209,10 @@ class KsysCore:
 		for video in videos:
 			# Create a list item with a text label and a thumbnail image.
 
-			timeStart = modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")
-			timeEnd = modTime.strptime(video['dateCompleteFin'], "%Y%m%d%H%M")
+			timeStart = modTime.strptime(video['start'], "%Y%m%d%H%M")
+			timeEnd = modTime.strptime(video['stop'], "%Y%m%d%H%M")
 
-			title = video['titre'] + "  [" + modTime.strftime("%d/%m/%Y %H:%M", modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")) + "]"
+			title = video['titre'] + "  [" + modTime.strftime("%d/%m/%Y %H:%M", modTime.strptime(video['start'], "%Y%m%d%H%M")) + "]"
 			list_item = xbmcgui.ListItem(label=title)
 
 			timeStart = modTime.mktime(timeStart)
@@ -293,17 +293,17 @@ class KsysCore:
 			for videoKey in listEPG[channel].keys():
 				# Create a list item with a text label and a thumbnail image.
 				video = listEPG[channel][videoKey]
-				timeStart = modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")
-				timeEnd = modTime.strptime(video['dateCompleteFin'], "%Y%m%d%H%M")
+				timeStart = modTime.strptime(video['start'], "%Y%m%d%H%M")
+				timeEnd = modTime.strptime(video['stop'], "%Y%m%d%H%M")
 
-				title = "[" + modTime.strftime("%d/%m/%Y %H:%M", modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")) + "] " + video['titre']
+				title = "[" + modTime.strftime("%d/%m/%Y %H:%M", modTime.strptime(video['start'], "%Y%m%d%H%M")) + "] " + video['titre']
 				list_item = xbmcgui.ListItem(label=title)
 
 				timeStart = modTime.mktime(timeStart)
 				timeEnd = modTime.mktime(timeEnd)
 
 				# Set additional info for the list item.
-				list_item.setInfo('video', {'title': title, 'genre': video['categorieDetail'], 'dateadded': modTime.strftime("%Y-%m-%d %H:%M:%s", modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")) ,'mediatype': 'movie', 'dbid': video['id'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
+				list_item.setInfo('video', {'title': title, 'genre': video['categorieDetail'], 'dateadded': modTime.strftime("%Y-%m-%d %H:%M:%s", modTime.strptime(video['start'], "%Y%m%d%H%M")) ,'mediatype': 'movie', 'dbid': video['id'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
 				list_item.setProperty('IsPlayable', 'true')
 
 				duration = timeEnd - timeStart
