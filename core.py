@@ -25,7 +25,6 @@ class KsysCore:
 		self._url = sys.argv[0]
 		# Get the plugin handle as an integer number.
 		self._handle = int(sys.argv[1])
-		print "TROLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL HANDLE : " + str(self._handle)
 		self.user = KsysUser()
 		self.pluginPath = xbmc.translatePath(self.Addon.getAddonInfo('path')).decode('utf-8')
 
@@ -99,13 +98,10 @@ class KsysCore:
 	Affiche toutes les catégories PRINCIPALES disponible en replay (donné par le KTV)
 	"""
 	def list_categories(self):
-		print "TROLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL0"
 		# Get video categories
 		categories = self.user.getCategory()
-		print "TROLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL1"
 		# Iterate through categories
 		for category in categories.keys():
-			print "TROLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL1.5"
 			if len(categories[category]) > 1:
 				list_item = xbmcgui.ListItem(label=category.title())
 				list_item.setInfo('video', {'title': category, 'genre': category})
@@ -117,10 +113,8 @@ class KsysCore:
 				list_item.setInfo('video', {'title': subcat, 'genre': subcat})
 				url = self.get_url(action='listingVideoCategory', category=category, subcat=unidecode(subcat))
 				xbmcplugin.addDirectoryItem(self._handle, url, list_item, True)
-		print "TROLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL2"
 		xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
 		xbmcplugin.endOfDirectory(self._handle)
-		print "TROLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL3"
 	"""
 	Affiche les sous-catégories d'une catégorie principale
 
@@ -173,27 +167,27 @@ class KsysCore:
 
 			if video['count'] > 1:
 				is_dir = True
-				title = video['titre'] + " [" + str(video['count']) + " programmes]"
+				title = video['title'] + " [" + str(video['count']) + " programmes]"
 				list_item = xbmcgui.ListItem(label=title)
-				url = self.get_url(action='searchVideo', title=unidecode(video['titre']))
+				url = self.get_url(action='searchVideo', title=unidecode(video['title']))
 
 			else:
 				# Create a list item with a text label and a thumbnail image.
-				list_item = xbmcgui.ListItem(label=video['titre'])
-				timeStart = modTime.mktime(modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M"))
-				timeEnd = modTime.mktime(modTime.strptime(video['dateCompleteFin'], "%Y%m%d%H%M"))
+				list_item = xbmcgui.ListItem(label=video['title'])
+				timeStart = modTime.mktime(modTime.strptime(video['start'], "%Y%m%d%H%M"))
+				timeEnd = modTime.mktime(modTime.strptime(video['stop'], "%Y%m%d%H%M"))
 
 				# Set additional info for the list item.
-				list_item.setInfo('video', {'title': video['titre'], 'genre': video['categorieDetail'], 'mediatype': 'movie', 'dbid': video['id'], 'mpaa': video['classeCSA'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
+				list_item.setInfo('video', {'title': video['title'], 'genre': video['subcategory'], 'mediatype': 'movie', 'dbid': video['id'], 'duration': (timeEnd-timeStart), 'plot': video['desc'], 'plotoutline': video['desc']})
 				list_item.setProperty('IsPlayable', 'true')
 
 				duration = timeEnd - timeStart
 				duration = self.add_margin_video(duration)
 
-				urlVideo = self.user.getURLCatchup(str(video['numChaine']), int(timeStart), duration)
+				urlVideo = self.user.getURLCatchup(str(video['channel_id']), int(timeStart), duration)
 				url = self.get_url(action='play', video=urlVideo)
 
-			list_item.setArt({'thumb': video['vignette'], 'icon': video['vignette'], 'fanart': video['vignette']})
+			list_item.setArt({'thumb': video['image'], 'icon': video['image'], 'fanart': video['image']})
 			xbmcplugin.addDirectoryItem(self._handle, url, list_item, is_dir)
 
 		# Add a sort method for the virtual folder items (alphabetically, ignore articles)
@@ -215,26 +209,26 @@ class KsysCore:
 		for video in videos:
 			# Create a list item with a text label and a thumbnail image.
 
-			timeStart = modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")
-			timeEnd = modTime.strptime(video['dateCompleteFin'], "%Y%m%d%H%M")
+			timeStart = modTime.strptime(video['start'], "%Y%m%d%H%M")
+			timeEnd = modTime.strptime(video['stop'], "%Y%m%d%H%M")
 
-			title = video['titre'] + "  [" + modTime.strftime("%d/%m/%Y %H:%M", modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")) + "]"
+			title = video['title'] + "  [" + modTime.strftime("%d/%m/%Y %H:%M", modTime.strptime(video['start'], "%Y%m%d%H%M")) + "]"
 			list_item = xbmcgui.ListItem(label=title)
 
 			timeStart = modTime.mktime(timeStart)
 			timeEnd = modTime.mktime(timeEnd)
 
 			# Set additional info for the list item.
-			list_item.setInfo('video', {'title': title, 'genre': video['categorieDetail'], 'mediatype': 'movie', 'dbid': video['id'], 'mpaa': video['classeCSA'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
+			list_item.setInfo('video', {'title': title, 'genre': video['subcategory'], 'mediatype': 'movie', 'dbid': video['id'], 'duration': (timeEnd-timeStart), 'plot': video['desc'], 'plotoutline': video['desc']})
 			list_item.setProperty('IsPlayable', 'true')
 
 			duration = timeEnd - timeStart
 			duration = self.add_margin_video(duration)
 
-			urlVideo = self.user.getURLCatchup(str(video['numChaine']), str(int(timeStart)), duration)
+			urlVideo = self.user.getURLCatchup(str(video['channel_id']), str(int(timeStart)), duration)
 			url = self.get_url(action='play', video=urlVideo)
 
-			list_item.setArt({'thumb': video['vignette'], 'icon': video['vignette'], 'fanart': video['vignette']})
+			list_item.setArt({'thumb': video['image'], 'icon': video['image'], 'fanart': video['image']})
 			xbmcplugin.addDirectoryItem(self._handle, url, list_item, False)
 
 		# Add a sort method for the virtual folder items (alphabetically, ignore articles)
@@ -299,17 +293,17 @@ class KsysCore:
 			for videoKey in listEPG[channel].keys():
 				# Create a list item with a text label and a thumbnail image.
 				video = listEPG[channel][videoKey]
-				timeStart = modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")
-				timeEnd = modTime.strptime(video['dateCompleteFin'], "%Y%m%d%H%M")
+				timeStart = modTime.strptime(video['start'], "%Y%m%d%H%M")
+				timeEnd = modTime.strptime(video['stop'], "%Y%m%d%H%M")
 
-				title = "[" + modTime.strftime("%d/%m/%Y %H:%M", modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")) + "] " + video['titre']
+				title = "[" + modTime.strftime("%d/%m/%Y %H:%M", modTime.strptime(video['start'], "%Y%m%d%H%M")) + "] " + video['title']
 				list_item = xbmcgui.ListItem(label=title)
 
 				timeStart = modTime.mktime(timeStart)
 				timeEnd = modTime.mktime(timeEnd)
 
 				# Set additional info for the list item.
-				list_item.setInfo('video', {'title': title, 'genre': video['categorieDetail'], 'dateadded': modTime.strftime("%Y-%m-%d %H:%M:%s", modTime.strptime(video['dateCompleteDebut'], "%Y%m%d%H%M")) ,'mediatype': 'movie', 'dbid': video['id'], 'mpaa': video['classeCSA'], 'duration': (timeEnd-timeStart), 'plot': video['description'], 'plotoutline': video['description']})
+				list_item.setInfo('video', {'title': title, 'genre': video['subcategory'], 'dateadded': modTime.strftime("%Y-%m-%d %H:%M:%s", modTime.strptime(video['start'], "%Y%m%d%H%M")) ,'mediatype': 'movie', 'dbid': video['id'], 'duration': (timeEnd-timeStart), 'plot': video['desc'], 'plotoutline': video['desc']})
 				list_item.setProperty('IsPlayable', 'true')
 
 				duration = timeEnd - timeStart
@@ -318,7 +312,7 @@ class KsysCore:
 				urlVideo = self.user.getURLCatchup(str(video['channel_id']), str(int(timeStart)), str(duration))
 				url = self.get_url(action='play', video=urlVideo)
 
-				list_item.setArt({'thumb': video['vignette'], 'icon': video['vignette'], 'fanart': video['vignette']})
+				list_item.setArt({'thumb': video['image'], 'icon': video['image'], 'fanart': video['image']})
 				xbmcplugin.addDirectoryItem(self._handle, url, list_item, False)
 
 		xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
