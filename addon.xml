@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.replayksys"
-version="1.0.0"
+version="1.0.1"
 name="K-Sys Replay"
 provider-name="KSys">
 <requires>
@@ -23,6 +23,7 @@ provider-name="KSys">
     <screenshot>resources\screenshot-02.jpg</screenshot>
     <screenshot>resources\screenshot-03.jpg</screenshot>    
   </assets>
+  <news>Correction de bugs</news>
   <news>Développement en cours</news>
 </extension>
 </addon>
