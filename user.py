@@ -104,9 +104,10 @@ class KsysUser:
 
 	def getJWTByRefreshToken(self):
 		dialog = xbmcgui.Dialog()
+		data = {'grant_type': 'refresh_token', 'client_id': 'ktv', 'refresh_token': self.refreshToken}
 		req = requests.post(
 			self.KAUTH_URL+"v1/access_token",
-			data="grant_type=refresh_token&client_id=ktv&refresh_token=" + self.refreshToken,
+			data=data,
 			headers={"Content-type": "application/x-www-form-urlencoded"}
 		)
 		if req.status_code == 200:
@@ -123,7 +124,7 @@ class KsysUser:
 	def getAccessToken(self):
 		if self.accessToken != "" and self.expireToken > time.time():
 			return self.accessToken
-		elif self.accessToken == "" and self.refreshToken != "":
+		elif self.refreshToken != "":
 			return self.getJWTByRefreshToken()
 		else:
 			return self.getTokenByCode()
