@@ -12,7 +12,7 @@ import xbmcplugin
 import requests
 import random
 import simplejson as json
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timezone
 import time as modTime
 from unidecode import unidecode
 
@@ -262,7 +262,7 @@ class KsysCore:
 	:type channelNum: str
 	"""
 	def list_day_channel(self, channelName, channelNum):
-		midnight = date.today().strftime("%s")
+		midnight = int(datetime.combine(datetime.today(), time.min).replace(tzinfo=timezone.utc).timestamp())
 		secondeInDay = 86400
 		for day in range(0,7):
 			midnightDay = int(midnight)-(day*secondeInDay)
