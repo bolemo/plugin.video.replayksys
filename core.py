@@ -309,7 +309,7 @@ class KsysCore:
 				timeEnd = modTime.mktime(timeEnd)
 
 				# Set additional info for the list item.
-				list_item.setInfo('video', {'title': title, 'genre': video['subcategory'], 'dateadded': modTime.strftime("%Y-%m-%d %H:%M:%s", modTime.strptime(video['start'], "%Y%m%d%H%M")) ,'mediatype': 'movie', 'dbid': video['id'], 'duration': (timeEnd-timeStart), 'plot': video['desc'], 'plotoutline': video['desc']})
+				list_item.setInfo('video', {'title': title, 'genre': video['subcategory'], 'dateadded': modTime.strftime("%Y-%m-%d %H:%M", modTime.strptime(video['start'], "%Y%m%d%H%M")) ,'mediatype': 'movie', 'dbid': video['id'], 'duration': (timeEnd-timeStart), 'plot': video['desc'], 'plotoutline': video['desc']})
 				list_item.setProperty('IsPlayable', 'true')
 
 				duration = timeEnd - timeStart
