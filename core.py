@@ -12,7 +12,8 @@ import xbmcplugin
 import requests
 import random
 import simplejson as json
-from datetime import datetime, date, time, timezone
+from datetime import datetime, date, time as dtime, timedelta
+import time
 import time as modTime
 from unidecode import unidecode
 
@@ -253,6 +254,11 @@ class KsysCore:
 		xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
 		xbmcplugin.endOfDirectory(self._handle)
 
+	def totimestamp(self, dt, epoch=datetime(1970,1,1)):
+		td = dt - epoch
+		# return td.total_seconds()
+		return (td.microseconds + (td.seconds + td.days * 86400) * 10**6) / 10**6 
+
 	"""
 	Affiche les jours disponibles pour la chaine donnée (Dans notre cas J-7)
 
@@ -262,7 +268,7 @@ class KsysCore:
 	:type channelNum: str
 	"""
 	def list_day_channel(self, channelName, channelNum):
-		midnight = int(datetime.combine(datetime.today(), time.min).replace(tzinfo=timezone.utc).timestamp())
+		midnight = self.totimestamp(datetime.combine(datetime.today(), dtime.min))
 		secondeInDay = 86400
 		for day in range(0,7):
 			midnightDay = int(midnight)-(day*secondeInDay)
