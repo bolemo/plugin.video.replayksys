@@ -96,7 +96,7 @@ class KsysUser:
 				if not ok:
 					break
 			else:
-				print ('Error : authentification return HTTP ' + req.status_code)
+				print(('Error : authentification return HTTP ' + req.status_code))
 				json_req = json.loads(req.text)
 				ok = xbmcgui.Dialog().ok("K-Sys Replay", "Erreur innatendue !", "", json_req["message"], "Non","Oui")
 				break
