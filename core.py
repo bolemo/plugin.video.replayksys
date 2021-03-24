@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from urllib import urlencode
-from urlparse import parse_qsl
+from urllib.parse import urlencode
+from urllib.parse import parse_qsl
 import os
 import xbmc
 import xbmcaddon
@@ -102,7 +102,7 @@ class KsysCore:
 		# Get video categories
 		categories = self.user.getCategory()
 		# Iterate through categories
-		for category in categories.keys():
+		for category in list(categories.keys()):
 			if len(categories[category]) > 1:
 				list_item = xbmcgui.ListItem(label=category.title())
 				list_item.setInfo('video', {'title': category, 'genre': category})
@@ -296,7 +296,7 @@ class KsysCore:
 		listEPG = self.user.getEPG(channel, start, duration)
 
 		for channel in listEPG:
-			for videoKey in listEPG[channel].keys():
+			for videoKey in list(listEPG[channel].keys()):
 				# Create a list item with a text label and a thumbnail image.
 				video = listEPG[channel][videoKey]
 				timeStart = modTime.strptime(video['start'], "%Y%m%d%H%M")
